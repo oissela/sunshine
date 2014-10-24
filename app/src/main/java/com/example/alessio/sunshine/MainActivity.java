@@ -104,7 +104,8 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
         if (mTwoPane) {
             DetailFragment details = (DetailFragment)
                     getSupportFragmentManager().findFragmentById(R.id.weather_detail_container);
-            if (details == null || !details.getShownDate().equals(date)) {
+            if (details == null || details.getShownDate() == null
+                    || !details.getShownDate().equals(date)) {
                 details = DetailFragment.newInstance(date);
 
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
