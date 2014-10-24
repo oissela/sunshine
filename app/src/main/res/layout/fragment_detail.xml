@@ -19,13 +19,11 @@
             <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tomorrow"
                 android:id="@+id/detail_dayname_textview" />
 
             <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="June 24"
                 android:id="@+id/detail_date_textview" />
         </LinearLayout>
 
@@ -45,13 +43,11 @@
                 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="21"
                     android:id="@+id/detail_high_textview" />
 
                 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="11"
                     android:id="@+id/detail_low_textview" />
             </LinearLayout>
 
@@ -69,7 +65,6 @@
                 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Clear"
                     android:id="@+id/detail_forecast_textview" />
             </LinearLayout>
         </LinearLayout>
@@ -77,19 +72,16 @@
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="48%"
             android:id="@+id/detail_humidity_textview" />
 
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="6 km/h NW"
             android:id="@+id/detail_wind_textview" />
 
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="1014"
             android:id="@+id/detail_pressure_textview" />
 
     </LinearLayout>

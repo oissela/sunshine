@@ -66,7 +66,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         if (savedInstanceState != null) {
             mLocation = (String) savedInstanceState.get(LOCATION_KEY);
         }
-        getLoaderManager().initLoader(DETAIL_LOADER, null, this);
+        Bundle arguments = getArguments();
+        if (arguments != null && arguments.containsKey(DATE_KEY)) {
+            getLoaderManager().initLoader(DETAIL_LOADER, null, this);
+        }
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -118,18 +121,18 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onResume() {
         super.onResume();
-        if (mLocation != null && !mLocation.equals(Utility.getPreferredLocation(getActivity()))) {
+        Bundle arguments = getArguments();
+        if (arguments != null && arguments.containsKey(DATE_KEY) &&
+                mLocation != null && !mLocation.equals(Utility.getPreferredLocation(getActivity()))) {
             getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
         }
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        Intent intent = getActivity().getIntent();
-        if (intent == null || !intent.hasExtra(DATE_KEY)) {
+        String weatherDate = getShownDate();
+        if (weatherDate == null)
             return null;
-        }
-        String weatherDate = intent.getStringExtra(DATE_KEY);
 
         String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATETEXT + " ASC";
 
@@ -196,5 +199,26 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    /**
+     * Create a new instance of DetailFragment, initialized
+     * to show the forecast for the date "date".
+     */
+    public static DetailFragment newInstance(String date) {
+        DetailFragment f = new DetailFragment();
+
+        Bundle args = new Bundle();
+        args.putString(DATE_KEY, date);
+        f.setArguments(args);
+
+        return f;
+    }
+
+    public String getShownDate() {
+        Bundle args = getArguments();
+        if (args == null || !args.containsKey(DATE_KEY))
+            return null;
+        return args.getString(DATE_KEY);
     }
 }

@@ -1,6 +1,6 @@
 package com.example.alessio.sunshine;
 
-import android.content.Intent;
+import android.app.Activity;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -59,6 +59,18 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public static final int COL_LOCATION_SETTING = 5;
     public static final int COL_WEATHER_CONDITION_ID = 6;
 
+    Callback mCallback;
+    /**
+     * A callback interface that all activities containing this fragment must
+     * implement. This mechanism allows activities to be notified of item
+     * selections.
+     */
+    public interface Callback {
+        /**
+         * Callback for when an item has been selected.
+         */
+        public void onItemSelected(String date);
+    }
 
     public ForecastFragment() {
         setHasOptionsMenu(true);
@@ -88,6 +100,17 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mCallback = (Callback) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement Callback");
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -103,9 +126,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                 Cursor cursor = adapter.getCursor();
                 if (null != cursor && cursor.moveToPosition(position)) {
                     String weatherDate = cursor.getString(COL_WEATHER_DATE);
-                    Intent showDetail = new Intent(getActivity(), DetailActivity.class);
-                    showDetail.putExtra(DetailFragment.DATE_KEY, weatherDate);
-                    startActivity(showDetail);
+                    mCallback.onItemSelected(weatherDate);
+                    //Intent showDetail = new Intent(getActivity(), DetailActivity.class);
+                    //showDetail.putExtra(DetailFragment.DATE_KEY, weatherDate);
+                    //startActivity(showDetail);
                 }
             }
         });
