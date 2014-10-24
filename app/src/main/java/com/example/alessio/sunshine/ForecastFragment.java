@@ -114,7 +114,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_my, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         mForecastAdapter = new ForecastAdapter(getActivity(), null, 0);
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
@@ -124,12 +124,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 ForecastAdapter adapter = (ForecastAdapter) adapterView.getAdapter();
                 Cursor cursor = adapter.getCursor();
-                if (null != cursor && cursor.moveToPosition(position)) {
+                if (cursor != null && cursor.moveToPosition(position)) {
                     String weatherDate = cursor.getString(COL_WEATHER_DATE);
                     mCallback.onItemSelected(weatherDate);
-                    //Intent showDetail = new Intent(getActivity(), DetailActivity.class);
-                    //showDetail.putExtra(DetailFragment.DATE_KEY, weatherDate);
-                    //startActivity(showDetail);
                 }
             }
         });
