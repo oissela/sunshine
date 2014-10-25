@@ -1,8 +1,10 @@
 package com.example.alessio.sunshine.service;
 
 import android.app.IntentService;
+import android.content.BroadcastReceiver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -153,8 +155,6 @@ public class SunshineService extends IntentService {
         double cityLatitude = coordJSON.getLong(OWM_COORD_LAT);
         double cityLongitude = coordJSON.getLong(OWM_COORD_LONG);
 
-        Log.v(LOG_TAG, cityName + ", with coord: " + cityLatitude + " " + cityLongitude);
-
         // Insert the location into the database.
         long locationID = addLocation(locationSetting, cityName, cityLatitude, cityLongitude);
 
@@ -237,8 +237,6 @@ public class SunshineService extends IntentService {
      */
     private long addLocation(String locationSetting, String cityName, double lat, double lon) {
 
-        Log.v(LOG_TAG, "inserting " + cityName + ", with coord: " + lat + ", " + lon);
-
         // First, check if the location with this city name exists in the db
         Cursor cursor = getContentResolver().query(
                 WeatherContract.LocationEntry.CONTENT_URI,
@@ -248,11 +246,9 @@ public class SunshineService extends IntentService {
                 null);
 
         if (cursor.moveToFirst()) {
-            Log.v(LOG_TAG, "Found it in the database!");
             int locationIdIndex = cursor.getColumnIndex(WeatherContract.LocationEntry._ID);
             return cursor.getLong(locationIdIndex);
         } else {
-            Log.v(LOG_TAG, "Didn't find it in the database, inserting now!");
             ContentValues locationValues = new ContentValues();
             locationValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, locationSetting);
             locationValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, cityName);
@@ -263,6 +259,15 @@ public class SunshineService extends IntentService {
                     .insert(WeatherContract.LocationEntry.CONTENT_URI, locationValues);
 
             return ContentUris.parseId(locationInsertUri);
+        }
+    }
+
+    public static class AlarmReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Intent sendIntent = new Intent(context, SunshineService.class);
+            sendIntent.putExtra(LOCATION_KEY, intent.getStringExtra(LOCATION_KEY));
+            context.startService(sendIntent);
         }
     }
 }
