@@ -35,6 +35,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private String mLocation;
     private ListView mListView;
     private int mCursorPosition = ListView.INVALID_POSITION;
+    private boolean mUseTodayLayout;
     // For the forecast view we're showing only a small subset of the stored data.
     // Specify the columns we need.
     private static final String[] FORECAST_COLUMNS = {
@@ -121,6 +122,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         mForecastAdapter = new ForecastAdapter(getActivity(), null, 0);
+        mForecastAdapter.setUseTodayLayout(mUseTodayLayout);
+
         mListView = (ListView) rootView.findViewById(R.id.listview_forecast);
         mListView.setAdapter(mForecastAdapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -209,5 +212,12 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             outState.putInt(CURSOR_POSITION, mCursorPosition);
         }
         super.onSaveInstanceState(outState);
+    }
+
+    public void setUseTodayLayout(boolean useTodayLayout) {
+        mUseTodayLayout = useTodayLayout;
+        if (mForecastAdapter != null) {
+            mForecastAdapter.setUseTodayLayout(useTodayLayout);
+        }
     }
 }
