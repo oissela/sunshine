@@ -35,6 +35,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.alessio.sunshine.MyActivity" />
             </activity>
+        <service android:name=".service.SunshineService" />
         <provider
             android:authorities="com.example.alessio.sunshine"
             android:name=".data.WeatherProvider"

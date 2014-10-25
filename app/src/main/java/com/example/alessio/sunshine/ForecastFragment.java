@@ -1,6 +1,7 @@
 package com.example.alessio.sunshine;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.widget.ListView;
 import com.example.alessio.sunshine.data.WeatherContract;
 import com.example.alessio.sunshine.data.WeatherContract.LocationEntry;
 import com.example.alessio.sunshine.data.WeatherContract.WeatherEntry;
+import com.example.alessio.sunshine.service.SunshineService;
 
 import java.util.Date;
 
@@ -153,7 +155,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     private void updateWeather() {
         String location = Utility.getPreferredLocation(getActivity());
-        new FetchWeatherTask(getActivity()).execute(location);
+        Intent intent = new Intent(getActivity(), SunshineService.class);
+        intent.putExtra(SunshineService.LOCATION_KEY, location);
+        getActivity().startService(intent);
     }
 
     @Override
