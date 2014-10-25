@@ -1,10 +1,6 @@
 package com.example.alessio.sunshine;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,7 +21,7 @@ import android.widget.ListView;
 import com.example.alessio.sunshine.data.WeatherContract;
 import com.example.alessio.sunshine.data.WeatherContract.LocationEntry;
 import com.example.alessio.sunshine.data.WeatherContract.WeatherEntry;
-import com.example.alessio.sunshine.service.SunshineService;
+import com.example.alessio.sunshine.sync.SunshineSyncAdapter;
 
 import java.util.Date;
 
@@ -157,14 +153,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     private void updateWeather() {
-        Intent alarmIntent = new Intent(getActivity(), SunshineService.AlarmReceiver.class);
-        alarmIntent.putExtra(SunshineService.LOCATION_KEY, Utility.getPreferredLocation(getActivity()));
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
-        AlarmManager alarmMgr = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
-
-        alarmMgr.set(AlarmManager.RTC_WAKEUP,
-                System.currentTimeMillis() + 5000, pendingIntent);
+        SunshineSyncAdapter.syncImmediately(getActivity());
     }
 
     @Override

@@ -10,7 +10,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
 import com.example.alessio.sunshine.data.WeatherContract;
-import com.example.alessio.sunshine.service.SunshineService;
+import com.example.alessio.sunshine.sync.SunshineSyncAdapter;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings.
@@ -67,10 +67,7 @@ public class SettingsActivity extends PreferenceActivity
         // are we starting the preference activity?
         if ( !mBindingPreference ) {
             if (preference.getKey().equals(getString(R.string.pref_location_key))) {
-                String location = value.toString();
-                Intent intent = new Intent(this, SunshineService.class);
-                intent.putExtra(SunshineService.LOCATION_KEY, location);
-                startService(intent);
+                SunshineSyncAdapter.syncImmediately(this);
             } else {
                 // notify code that weather may be impacted
                 getContentResolver().notifyChange(WeatherContract.WeatherEntry.CONTENT_URI, null);
