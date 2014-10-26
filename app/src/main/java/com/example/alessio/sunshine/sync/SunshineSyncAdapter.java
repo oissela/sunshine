@@ -39,6 +39,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
@@ -261,10 +262,22 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         if (cVVector.size() > 0) {
             ContentValues[] cvArray = new ContentValues[cVVector.size()];
             cVVector.toArray(cvArray);
+            removeOldData();
             getContext().getContentResolver()
                     .bulkInsert(WeatherContract.WeatherEntry.CONTENT_URI, cvArray);
             notifyWeather();
         }
+    }
+
+    private void removeOldData() {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        String[] selectionArgs = {WeatherContract.getDbDateString(cal.getTime())};
+
+        getContext().getContentResolver()
+                .delete(WeatherEntry.CONTENT_URI,
+                        WeatherEntry.COLUMN_DATETEXT + " <= ?",
+                        selectionArgs);
     }
 
     /**
